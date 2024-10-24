@@ -63,10 +63,18 @@ This tools produces the following output files:
 
 You can tweak the Circos plot by modifying the data in the `circos` directory and then regenerating the Circos plots using:
 ```
-> circos --config ./circos/circos.conf 
+> circos --config ./circos/circos.conf
 ```
 
 ## Interpreting the Circos plot
 
+TBD
+
 ## Customization
 
+TBD
+
+## Citations
+
+If you find this tool useful please consider citing Circos as it does the heavy lifting :
+ - Krzywinski, M. et al. [Circos: an Information Aesthetic for Comparative Genomics](https://genome.cshlp.org/content/early/2009/06/15/gr.092759.109.abstract). Genome Res (2009) 19:1639-1645
