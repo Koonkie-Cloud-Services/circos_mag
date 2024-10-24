@@ -74,7 +74,7 @@ TBD
 
 TBD
 
-## Citations
+## Acknowledgements and Citations
 
-If you find this tool useful please consider citing Circos as it does the heavy lifting :
+If you find this tool please useful, please consider meantioning [Koonkie Inc.](https://www.koonkie.com/) in your Acknowledgements and citing Circos:
  - Krzywinski, M. et al. [Circos: an Information Aesthetic for Comparative Genomics](https://genome.cshlp.org/content/early/2009/06/15/gr.092759.109.abstract). Genome Res (2009) 19:1639-1645
