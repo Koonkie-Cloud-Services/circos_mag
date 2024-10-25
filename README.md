@@ -79,10 +79,6 @@ The Circos plot produced by this tool consists of a number of rings that visuall
 <img src="https://github.com/Koonkie-Cloud-Services/circos_mag/blob/main/images/circos.png" width="600">
 </p>
 
-## Customization
-
-TBD
-
 ## Acknowledgements and Citations
 
 If you find this tool please useful, please consider meantioning [Koonkie Inc.](https://www.koonkie.com/) in your Acknowledgements and citing Circos:
