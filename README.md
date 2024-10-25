@@ -68,7 +68,7 @@ You can tweak the Circos plot by modifying the data in the `circos` directory an
 
 ## Interpreting the Circos plot
 
-TBD
+<img src="https://github.com/Koonkie-Cloud-Services/circos_mag/blob/main/images/circos.png" width="600">
 
 ## Customization
 
