@@ -69,13 +69,15 @@ You can tweak the Circos plot by modifying the data in the `circos` directory an
 ## Interpreting the Circos plot
 
 The Circos plot produced by this tool consists of a number of rings that visually indicate the quality of a MAG:
- - __Ring 1__: The outer ring displays the contigs comprising a MAG in green. An additional red contig indicates the estimated amount of DNA missing from the MAG as set with the optional `--completeness` parameter. For contigs > 5kb, tick markers are drawn to indicate the length of the contig with units in kilobases.
- - __Ring 2__: TBD
- - __Ring 3__: TBD
- - __Ring 4__: TBD
- - __Ring 5__: TBD
+ - __Ring 1__: Displays the contigs comprising a MAG in green. An additional red contig indicates the estimated amount of DNA missing from the MAG as set with the optional `--completeness` parameter. For contigs > 5kb, tick markers are drawn to indicate the length of the contig with units in kilobases.
+ - __Ring 2__: Displays the deviation in GC content of 1000 bp windows from the mean GC of the entire MAG. This background of this ring has 3 positive and negative bands that go from grey to white and each indicate a +/-5% GC deviations. For eample, windows reaching the last band in white have a GC deviation >10% from the mean GC. The window size can be changed with `--gc_window_size` parameter. 
+ - __Ring 3__: Displays the location of 5S (square), 16S (triangle), and 23S (circle) rRNA genes indentified in the MAG as grey shapes.
+ - __Ring 4__: Displays the location of tRNA genes identified in the MAG as dark red rhombi (i.e. diamonds).
+ - __Ring 5__: Displays the deviation in coverage of 1000 bp windows from the mean coverage of the entire MAG. This background of this ring has 3 positive and negative bands that go from grey to white and each indicate a 100% coverage deviations. For eample, windows reaching the last band in white have a coverage that is >200% from the mean coverage. The window size can be changed with `--cov_window_size` parameter. 
 
-<center><img src="https://github.com/Koonkie-Cloud-Services/circos_mag/blob/main/images/circos.png" width="600"></center>center>
+<p align="center">
+<img src="https://github.com/Koonkie-Cloud-Services/circos_mag/blob/main/images/circos.png" width="600">
+</p>
 
 ## Customization
 
