@@ -58,11 +58,16 @@ class Karyotype():
         # create Karyotype file
         karyotype_file = os.path.join(output_dir, 'karyotype.tsv')
         fout = open(karyotype_file, 'w')
+        other_contig_bps = 0
         for idx, (contig_id, contig_len) in enumerate(sorted_contigs.items()):
             if contig_len < min_contig_len or idx == max_contigs:
-                break
+                other_contig_bps += contig_len
 
             fout.write(f'chr - {contig_id} {idx+1} 0 {contig_len} lgreen\n')
+
+        # draw extra chromosome representing any skipped contigs
+        if other_contig_bps > 0:
+            fout.write(f'chr - other {len(contig_lens)+1} 0 {missing_size} grey\n')
 
         # draw extra chromosome representing missing DNA
         if missing_size > 0:

@@ -58,7 +58,7 @@ The typical workflow for generating a Circos plot of your MAG is as follows:
 This tools produces the following output files:
  - `circos.png`: raster PNG file of the Circos plot
  - `circos.svg`: vector SVG file of the Circos plot
- - `genome_stats.tsv`: plain text file with common statistics about your MAG
+ - `genome_stats.tsv`: plain text file with common statistics about your MAG such as genome size, mean GC, and number of rRNA genes
  - `circos`: directory containing the configuration and data files used by Circos
 
 You can tweak the Circos plot by modifying the data in the `circos` directory and then regenerating the Circos plots using:
@@ -78,6 +78,16 @@ The Circos plot produced by this tool consists of a number of rings that visuall
 <p align="center">
 <img src="https://github.com/Koonkie-Cloud-Services/circos_mag/blob/main/images/circos.png" width="600">
 </p>
+
+## Customizing the Circos plot
+
+The Circos plot contains a few optional parameters for customizing the plot:
+ - `completeness`: This parameter is used to indicate the estimate completeness of a MAG as determined using a program such as [CheckM](https://github.com/Ecogenomics/CheckM). The amount of DNA estimated to be missing from the MAG is visually indicated by a red contig.
+ - `min_contig_len`: MAGs often have a large number of relatively short contigs. Be default, these are all drawn but this can be rather uninformative and add a lot of visual clutter. This parameters allows contigs shorter than a given length to all be drawn as a single grey contig in the outer ring. Note that any rRNA or tRNA genes on these contigs
+ will not be shown in the plot.
+ - `max_contigs`: This is similar to the above parameter, but simply limits the plot to the specified number of longest contigs.
+ - `gc_window_size` and `cov_window_size`: These parameters change the window size used to calculate GC and coverage across the contig. There is not biological justification for the default paramter of 1000 bp, but it tends to produce pleasing results in practice and is sufficiently short to identify areas with highly divergent GC or coverage.
+
 
 ## Acknowledgements and Citations
 
