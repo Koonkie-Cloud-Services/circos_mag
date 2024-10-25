@@ -68,7 +68,14 @@ You can tweak the Circos plot by modifying the data in the `circos` directory an
 
 ## Interpreting the Circos plot
 
-<img src="https://github.com/Koonkie-Cloud-Services/circos_mag/blob/main/images/circos.png" width="600">
+The Circos plot produced by this tool consists of a number of rings that visually indicate the quality of a MAG:
+ - __Ring 1__: The outer ring displays the contigs comprising a MAG in green. An additional red contig indicates the estimated amount of DNA missing from the MAG as set with the optional `--completeness` parameter. For contigs > 5kb, tick markers are drawn to indicate the length of the contig with units in kilobases.
+ - __Ring 2__: TBD
+ - __Ring 3__: TBD
+ - __Ring 4__: TBD
+ - __Ring 5__: TBD
+
+<center><img src="https://github.com/Koonkie-Cloud-Services/circos_mag/blob/main/images/circos.png" width="600"></center>center>
 
 ## Customization
 
