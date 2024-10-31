@@ -5,6 +5,7 @@ Generate Circos plot for MAG.
 import os
 import shutil
 import logging
+import dataclasses
 
 from circos_mag.karyotype import Karyotype
 from circos_mag.gc import GC
@@ -12,7 +13,8 @@ from circos_mag.rrna import rRNA
 from circos_mag.trna import tRNA
 from circos_mag.coverage import Coverage
 from circos_mag.execute import execute
-import seq_io as seq_io
+from circos_mag.plot_style import PlotStyle
+import circos_mag.seq_io as seq_io
 import circos_mag.defaults as Defaults
 
 
@@ -48,20 +50,49 @@ class CircosPlot():
 
         fout.close()
 
+    def customize_circos_config(self, config_file: str, plot_style: PlotStyle, attribute_prefix: str) -> None:
+        """Customize Circos config file with specified attributes."""
+
+        # read config file
+        config_data = open(config_file).readlines()
+
+        # get fields in plot style
+        plot_style_dict = dataclasses.asdict(plot_style)
+
+        # write out customized config file
+        fout = open(config_file, 'w')
+        for line in config_data:
+            if '=' in line:
+                attr, value = [t.strip() for t in line.strip().split('=')]
+
+                custom_attr = f'{attribute_prefix}_{attr}'
+                if custom_attr in plot_style_dict:
+                    value = plot_style_dict[custom_attr]
+
+                line = f'{attr} = {value}\n'
+
+            fout.write(line)
+
+        fout.close()
+
     def plot(self,
              genome_file: str,
              gff_file: str,
              coverage_file: str,
+             plot_style_file: str,
              completeness: float,
              min_contig_len: int,
              max_contigs: int,
-             gc_window_size: int,
-             cov_window_size: int,
              output_dir: str) -> None:
         """Generate Circos plot for MAG."""
 
         circos_out_dir = os.path.join(output_dir, 'circos')
         os.makedirs(circos_out_dir, exist_ok=True)
+
+        # get plot style
+        plot_style = PlotStyle()
+        if plot_style_file is not None:
+            plot_style.from_toml_file(plot_style_file)
 
         # create Karyotype file for MAG
         self.logger.info('Creating Karyotype file for MAG:')
@@ -71,6 +102,7 @@ class CircosPlot():
                                         completeness,
                                         min_contig_len,
                                         max_contigs,
+                                        plot_style,
                                         circos_out_dir)
         self.logger.info(f' - genome size = {genome_stats.genome_size}')
         self.logger.info(f' - contigs = {genome_stats.num_contigs}')
@@ -78,24 +110,26 @@ class CircosPlot():
         self.logger.info(f' - L50 = {genome_stats.l50_contigs}')
         self.logger.info(f' - annotated proteins = {genome_stats.num_annotated_proteins}')
         self.logger.info(f' - hypothetical proteins = {genome_stats.num_hypothetical_proteins}')
+        if genome_stats.num_filtered_contigs > 0:
+            self.logger.info(f' - number filtered contigs = {genome_stats.num_filtered_contigs}')
 
         # calculate GC-content over contigs in MAGs
         self.logger.info('Calculating GC content across contigs:')
         gc = GC()
-        mean_gc = gc.create(genome_file, gc_window_size, circos_out_dir)
+        mean_gc = gc.create(genome_file, plot_style, circos_out_dir)
         self.logger.info(f' - mean GC = {mean_gc:.1f}%')
 
         # determine position of rRNA genes
         self.logger.info('Determining position of rRNA genes:')
         rrna = rRNA()
-        rrna_counts = rrna.create(gff_file, circos_out_dir)
+        rrna_counts = rrna.create(gff_file, plot_style, circos_out_dir)
         for rrna_type, count in rrna_counts.items():
             self.logger.info(f' - {rrna_type} = {count}')
 
         # determine position of tRNA genes
         self.logger.info('Determining position of tRNA genes:')
         trna = tRNA()
-        trna_counts = trna.create(gff_file, circos_out_dir)
+        trna_counts = trna.create(gff_file, plot_style, circos_out_dir)
 
         total_trnas = 0
         unique_trans = set()
@@ -114,7 +148,7 @@ class CircosPlot():
             coverage = Coverage()
             mean_coverage, _contig_coverage = coverage.create(genome_file,
                                                               coverage_file,
-                                                              cov_window_size,
+                                                              plot_style,
                                                               circos_out_dir)
             self.logger.info(f' - mean coverage = {mean_coverage:.1f}')
         else:
@@ -132,6 +166,10 @@ class CircosPlot():
         # customize the ticks.conf file to exclude drawing
         # ticks on short contigs
         self.customize_tick_conf(genome_file, circos_out_dir)
+        self.customize_circos_config(os.path.join(circos_out_dir, 'gc.conf'), plot_style, 'gc')
+        self.customize_circos_config(os.path.join(circos_out_dir, 'coverage.conf'), plot_style, 'cov')
+        self.customize_circos_config(os.path.join(circos_out_dir, 'rrna.conf'), plot_style, 'rrna')
+        self.customize_circos_config(os.path.join(circos_out_dir, 'trna.conf'), plot_style, 'trna')
 
         # create Circos plot
         self.logger.info('Creating Circos plot.')
@@ -157,6 +195,8 @@ class CircosPlot():
         fout.write(f'No. CDS = {genome_stats.num_cds}\n')
         fout.write(f'No. annotated proteins = {genome_stats.num_annotated_proteins}\n')
         fout.write(f'No. hypothetical proteins = {genome_stats.num_hypothetical_proteins}\n')
+        if genome_stats.num_filtered_contigs > 0:
+            fout.write(f'No. filtered contigs = {genome_stats.num_filtered_contigs}\n')
 
         fout.write('\n[rRNA Statistics]\n')
         for rrna_type, count in rrna_counts.items():

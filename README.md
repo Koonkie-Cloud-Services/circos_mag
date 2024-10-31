@@ -36,7 +36,7 @@ You can test the installation using the data in the `example` directory:
 ## Usage
 
 The typical workflow for generating a Circos plot of your MAG is as follows:
- 1. Get the genomic FASTA file for your MAG
+ 1. Obtain genomic FASTA file for your MAG
  2. Run Prokka on your MAG to identify the 5S/16S/23S rRNA and tRNA genes in your MAG (<i>note</i>: Prokka only accepts uncompressed files):
  ```
 > conda activate circos_mag
@@ -61,7 +61,7 @@ This tools produces the following output files:
  - `genome_stats.tsv`: plain text file with common statistics about your MAG such as genome size, mean GC, and number of rRNA genes
  - `circos`: directory containing the configuration and data files used by Circos
 
-You can tweak the Circos plot by modifying the data in the `circos` directory and then regenerating the Circos plots using:
+You can tweak the Circos plot by modifying the data in the `<output_dir>/circos` directory and then regenerating the Circos plots using:
 ```
 > circos --config ./circos/circos.conf
 ```
@@ -70,25 +70,31 @@ You can tweak the Circos plot by modifying the data in the `circos` directory an
 
 The Circos plot produced by this tool consists of a number of rings that visually indicate the quality of a MAG:
  - __Ring 1__: Displays the contigs comprising a MAG in green. An additional red contig indicates the estimated amount of DNA missing from the MAG as set with the optional `--completeness` parameter. For contigs > 5kb, tick markers are drawn to indicate the length of the contig with units in kilobases.
- - __Ring 2__: Displays the deviation in GC content of 1000 bp windows from the mean GC of the entire MAG. This background of this ring has 3 positive and negative bands that go from grey to white and each indicate a +/-5% GC deviations. For eample, windows reaching the last band in white have a GC deviation >10% from the mean GC. The window size can be changed with `--gc_window_size` parameter. 
+ - __Ring 2__: Displays the deviation in GC content of 1000 bp windows from the mean GC of the entire MAG. Windows in orange/green have a higher/lower GC than the mean. The background of this ring has 3 positive and negative bands that go from grey to white and each indicate a +/-5% GC deviations. For eample, windows reaching the last band in white have a GC deviation >10% from the mean GC and are rendered in orange. The window size can be changed with `--gc_window_size` parameter. 
  - __Ring 3__: Displays the location of 5S (square), 16S (triangle), and 23S (circle) rRNA genes indentified in the MAG as grey shapes.
  - __Ring 4__: Displays the location of tRNA genes identified in the MAG as dark red rhombi (i.e. diamonds).
- - __Ring 5__: Displays the deviation in coverage of 1000 bp windows from the mean coverage of the entire MAG. This background of this ring has 3 positive and negative bands that go from grey to white and each indicate a 100% coverage deviations. For eample, windows reaching the last band in white have a coverage that is >200% from the mean coverage. The window size can be changed with `--cov_window_size` parameter. 
+ - __Ring 5__: Displays the percent deviation in coverage of 1000 bp windows from the mean coverage of the entire MAG. Windows in orange/green have a higher/lower coverage than the mean. The background of this ring has 3 positive and negative bands that go from grey to white and each indicate a 100% coverage deviations. For eample, windows reaching the last band in white have a coverage that is >200% from the mean coverage and are rendered in orange. The window size can be changed with `--cov_window_size` parameter. 
 
 <p align="center">
 <img src="https://github.com/Koonkie-Cloud-Services/circos_mag/blob/main/images/circos.png" width="600">
 </p>
 
-## Customizing the Circos plot
+## Customizing Circos plot with Command Line Arguements
 
-The Circos plot contains a few optional parameters for customizing the plot:
+The Circos plot contains a few optional arguments for customizing the plot:
  - `completeness`: This parameter is used to indicate the estimate completeness of a MAG as determined using a program such as [CheckM](https://github.com/Ecogenomics/CheckM). The amount of DNA estimated to be missing from the MAG is visually indicated by a red contig.
  - `min_contig_len`: MAGs often have a large number of relatively short contigs. Be default, these are all drawn but this can be rather uninformative and add a lot of visual clutter. This parameters allows contigs shorter than a given length to all be drawn as a single grey contig in the outer ring. Note that any rRNA or tRNA genes on these contigs
  will not be shown in the plot.
  - `max_contigs`: This is similar to the above parameter, but simply limits the plot to the specified number of longest contigs.
- - `gc_window_size` and `cov_window_size`: These parameters change the window size used to calculate GC and coverage across the contig. There is not biological justification for the default paramter of 1000 bp, but it tends to produce pleasing results in practice and is sufficiently short to identify areas with highly divergent GC or coverage.
 
+## Customizing Circos plot with a Custom Style File
 
+The Circos plot can be customized by providing a custom style file to the `--plot_style_file` argument. This file is a simple text file (technically a [TOML](https://toml.io/en/) formatted file) that can be edited in any text editor and allows for a number of visual elements to be modified. An example style file is provided in `example/plot_style.toml`. It is recommended to start with the example style file and modify elements from their default values as required. Documentation for changing value is provided at the top of the example style file.
+
+## Further Customization of SVG Plot
+
+Your Circos plot is also generated as a scalable vector graphics (SVG) file. This file can be modified in SVG editing software such as [Inkscape](https://circos.ca/documentation/tutorials/configuration/svg_output) or Adobe Illustrator. Circos uses a [custom font file](https://circos.ca/documentation/tutorials/configuration/svg_output/), `circossymbols.otf`, for symbols. This is in the `fonts` directory and must be installed on your system for symbols to display as expected. Under Windows, this can be down by double clicking on the `circossymbols.otf` file and then clicking Install. 
+ 
 ## Acknowledgements and Citations
 
 If you find this tool please useful, please consider meantioning [Koonkie Inc.](https://www.koonkie.com/) in your Acknowledgements and citing Circos:

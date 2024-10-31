@@ -28,11 +28,10 @@ class ProgramRunner():
         p.plot(args.genome_file,
                args.gff_file,
                args.coverage_file,
+               args.plot_style_file,
                args.completeness,
                args.min_contig_len,
                args.max_contigs,
-               args.gc_window_size,
-               args.cov_window_size,
                args.output_dir)
 
     def run(self, args) -> None:

@@ -6,6 +6,8 @@ import os
 import logging
 from collections import defaultdict
 
+from circos_mag.plot_style import PlotStyle
+
 
 class tRNA():
     """Create Circos file indicate position of tRNA genes."""
@@ -17,6 +19,7 @@ class tRNA():
 
     def create(self,
                gff_file: str,
+               plot_style: PlotStyle,
                output_dir: str) -> str:
         """Create Circos file indicate position of tRNA genes."""
 
@@ -50,7 +53,9 @@ class tRNA():
                         product = info_token.split('=')[-1]
                         trna_counts[product] += 1
 
-                fout.write(f'{contig_id} {start_pos} {end_pos} A\n')
+                row = f'{contig_id} {start_pos} {end_pos}'
+                row += f' {plot_style.trna_symbol} color={plot_style.trna_symbol_color}'
+                fout.write(f'{row}\n')
 
         fout.close()
 

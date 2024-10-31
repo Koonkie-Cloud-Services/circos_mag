@@ -6,6 +6,8 @@ import os
 import logging
 from collections import defaultdict
 
+from circos_mag.plot_style import PlotStyle
+
 
 class rRNA():
     """Create Circos file indicate position of 5S/16S/23S rRNA genes."""
@@ -17,6 +19,7 @@ class rRNA():
 
     def create(self,
                gff_file: str,
+               plot_style: PlotStyle,
                output_dir: str) -> str:
         """Create Circos file indicate position of 5S/16S/23S rRNA genes."""
 
@@ -50,24 +53,29 @@ class rRNA():
                     if info_token.startswith('product='):
                         product = info_token.split('=')[-1]
 
-                rrna_type = None
+                if product:
+                    rrna_counts[product] += 1
+
                 if product is None:
                     self.logger.warning('No rRNA product in GFF file:')
                     self.logger.warning(f'{line.strip()}')
                 elif product.startswith('5S'):
-                    rrna_type = '5S'
+                    symbol = plot_style.rrna_5S_symbol
+                    color = plot_style.rrna_5S_symbol_color
                 elif product.startswith('16S'):
-                    rrna_type = '16S'
+                    symbol = plot_style.rrna_16S_symbol
+                    color = plot_style.rrna_16S_symbol_color
                 elif product.startswith('23S'):
-                    rrna_type = '23S'
+                    symbol = plot_style.rrna_23S_symbol
+                    color = plot_style.rrna_23S_symbol_color
                 else:
                     self.logger.warning(f'Unknown rRNA product in GFF file: {product}')
+                    continue
 
-                if product:
-                    rrna_counts[product] += 1
+                row = f'{contig_id} {start_pos} {end_pos}'
+                row += f' {symbol} color={color}'
 
-                if rrna_type:
-                    fout.write(f'{contig_id} {start_pos} {end_pos} {rrna_type}\n')
+                fout.write(f'{row}\n')
 
         fout.close()
 

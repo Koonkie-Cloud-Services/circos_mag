@@ -68,14 +68,8 @@ def add_plot_subcommand(subparsers):
                      help="maximum number of contigs to include in Circos plot (from longest to shortest)",
                      type=int,
                      default=Defaults.MAX_CONTIGS)
-    opt.add_argument('--gc_window_size',
-                     help="size in base pairs of the window used to calculate GC content across a contig",
-                     type=int,
-                     default=Defaults.GC_WINDOW_SIZE)
-    opt.add_argument('--cov_window_size',
-                     help="size in base pairs of the window used to calculate coverage across a contig",
-                     type=int,
-                     default=Defaults.COV_WINDOW_SIZE)
+    opt.add_argument('--plot_style_file',
+                     help="file indicating plot style attributes")
     add_standard_opt(opt)
 
 

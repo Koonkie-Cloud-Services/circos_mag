@@ -1,0 +1,57 @@
+# Circos color definitions: https://circos.ca/documentation/tutorials/configuration/colors/images
+# 
+# show_background attributes must be one of:
+#  yes: show background
+#  no: do not show background
+#  data: only show background on contigs with data elements
+#
+# The thickness attribute indicates the stroke thickness and should
+# be specified in pixels as indicated by the "p".
+#
+# The size of rRNA and tRNA elements should also be specified in pixels with a "p".
+#
+# The symbol used for rRNA and tRNA elements must be one of:
+#  C: square
+#  F: rhombus
+#  I: triangle up
+#  L: triangle down
+#  O: circle
+
+[contigs]
+color = "green"
+filtered_color = "grey"
+missing_color = "dred"
+
+[gc]
+pos_deviation_color = "dorange"
+neg_deviation_color = "dblue"
+thickness = "1p"
+min = -15   # minimum and maximum deviation in GC content from the mean GC of the MAG
+max = 15
+show_background = "data"
+window_size = 1000
+
+[rrna]
+size = "32p"
+5S_symbol = "C"
+5S_color = "dgrey"
+16S_symbol = "I"
+16S_color = "dgrey"
+23S_symbol = "O"
+23S_color = "dgrey"
+show_background = "yes"
+
+[trna]
+size = "32p"
+symbol = "F"
+color = "dred"
+show_background = "yes"
+
+[coverage]
+pos_deviation_color = "dorange"
+neg_deviation_color = "dblue"
+thickness = "1p"
+min = -300  # minimum and maximum percent deviation in coverage from the mean coverage of the MAG
+max = 300
+show_background = "data"
+window_size = 1000

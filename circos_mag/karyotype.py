@@ -8,6 +8,7 @@ from dataclasses import dataclass
 
 import circos_mag.seq_tk as seq_tk
 import circos_mag.defaults as Defaults
+import circos_mag.plot_style as PlotStyle
 
 
 @dataclass
@@ -20,6 +21,7 @@ class GenomeStats:
     num_cds: int
     num_annotated_proteins: int
     num_hypothetical_proteins: int
+    num_filtered_contigs: int
 
 
 class Karyotype():
@@ -36,6 +38,7 @@ class Karyotype():
                completeness: float,
                min_contig_len: int,
                max_contigs: int,
+               plot_style: PlotStyle,
                output_dir: str) -> GenomeStats:
         """Create a Circos karyotype file for a MAG."""
 
@@ -59,19 +62,22 @@ class Karyotype():
         karyotype_file = os.path.join(output_dir, 'karyotype.tsv')
         fout = open(karyotype_file, 'w')
         other_contig_bps = 0
+        num_filtered_contigs = 0
         for idx, (contig_id, contig_len) in enumerate(sorted_contigs.items()):
             if contig_len < min_contig_len or idx == max_contigs:
                 other_contig_bps += contig_len
+                num_filtered_contigs += 1
+                continue
 
-            fout.write(f'chr - {contig_id} {idx+1} 0 {contig_len} lgreen\n')
+            fout.write(f'chr - {contig_id} {idx+1} 0 {contig_len} {plot_style.contig_color}\n')
 
         # draw extra chromosome representing any skipped contigs
         if other_contig_bps > 0:
-            fout.write(f'chr - other {len(contig_lens)+1} 0 {missing_size} grey\n')
+            fout.write(f'chr - other {len(contig_lens)+1} 0 {missing_size} {plot_style.contig_filtered_color}\n')
 
         # draw extra chromosome representing missing DNA
         if missing_size > 0:
-            fout.write(f'chr - missing_dna {len(contig_lens)+1} 0 {missing_size} dred\n')
+            fout.write(f'chr - missing_dna {len(contig_lens)+1} 0 {missing_size} {plot_style.contig_missing_color}\n')
 
         fout.close()
 
@@ -118,7 +124,8 @@ class Karyotype():
             missing_size=missing_size,
             num_cds=num_annotated_proteins + num_hypothetical_proteins,
             num_annotated_proteins=num_annotated_proteins,
-            num_hypothetical_proteins=num_hypothetical_proteins
+            num_hypothetical_proteins=num_hypothetical_proteins,
+            num_filtered_contigs=num_filtered_contigs
         )
 
         return genome_stats

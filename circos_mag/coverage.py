@@ -8,8 +8,8 @@ import gzip
 from typing import Tuple, Dict
 from collections import defaultdict
 
-import seq_io as seq_io
-import seq_tk as seq_tk
+import circos_mag.seq_io as seq_io
+import circos_mag.plot_style as PlotStyle
 
 
 class Coverage():
@@ -23,7 +23,7 @@ class Coverage():
     def create(self,
                genome_file: str,
                coverage_file: str,
-               window_size: int,
+               plot_style: PlotStyle,
                output_dir: str) -> Tuple[float, Dict[str, float]]:
         """Create Circos file indicate coverage across contigs."""
 
@@ -52,7 +52,7 @@ class Coverage():
                 base_idx = int(tokens[1])
                 base_cov = int(tokens[2])
 
-                window_idx = int(base_idx / window_size)
+                window_idx = int(base_idx / plot_style.cov_window_size)
                 contig_window_coverage[contig_id][window_idx] += base_cov
 
                 total_bases += 1
@@ -65,10 +65,10 @@ class Coverage():
         fout = open(cov_file, 'w')
         for contig_id in contig_window_coverage:
             for window_idx, window_base_count in contig_window_coverage[contig_id].items():
-                window_cov = window_base_count / window_size
+                window_cov = window_base_count / plot_style.cov_window_size
 
-                start_idx = window_idx*window_size
-                end_idx = (window_idx+1)*window_size
+                start_idx = window_idx*plot_style.cov_window_size
+                end_idx = (window_idx+1)*plot_style.cov_window_size
                 if end_idx >= contigs[contig_id]:
                     end_idx = contigs[contig_id]-1
                     if end_idx == start_idx:
@@ -78,9 +78,9 @@ class Coverage():
 
                 cov_perc_diff = 100.0 * (window_cov - mean_cov) / mean_cov
 
-                color = 'dorange'
+                color = plot_style.cov_pos_deviation_color
                 if cov_perc_diff < 0:
-                    color = 'dblue'
+                    color = plot_style.cov_neg_deviation_color
 
                 fout.write(f'{contig_id} {start_idx} {end_idx} {cov_perc_diff} fill_color={color}\n')
 
