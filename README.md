@@ -50,7 +50,7 @@ The typical workflow for generating a Circos plot of your MAG is as follows:
  5. Generate the Circos plot:
  ```
 > conda activate circos_mag
-> ./bin/circos_mag plot --genome_file example_mag.fna --gff_file ./prokka/example_name.gff --coverage_file coverage.tsv --completeness <estimate for your MAG> --output_dir <out_dir>
+> circos_mag plot --genome_file example_mag.fna --gff_file ./prokka/example_name.gff --coverage_file coverage.tsv --completeness <estimate for your MAG> --output_dir <out_dir>
  ```
 
 ## Output files
