@@ -1,11 +1,11 @@
 # Circos for MAGs
 
-This command line tool provides and easy-to-use interface for creating Circos plot for a MAG.
+This command line tool provides an easy-to-use interface for creating Circos plot for a MAG, SAG, or isolate genome.
 
 
 ## Installation
 
-This package requires [Circos](https://circos.ca), [Prokka](https://github.com/tseemann/prokka), and (optionally, be recommended) [Samtools](https://www.htslib.org) to be installed on your system. The easiest and recommend method for installing Circos and Prokka is to use [Conda](https://docs.conda.io/projects/conda/en/latest/index.html):
+This package requires [Circos](https://circos.ca), [Prokka](https://github.com/tseemann/prokka), and (optionally, but recommended) [Samtools](https://www.htslib.org) to be installed on your system. The easiest and recommend method for installing Circos and Prokka is to use [Conda](https://docs.conda.io/projects/conda/en/latest/index.html):
 
 ```
 > conda create -n circos_mag -c bioconda circos prokka
@@ -16,28 +16,28 @@ This creates a Conda environment named `circos_mag` that must be activate before
 > conda activate circos_mag
 ```
 
-You can also (optionally) install Samtools using Conda. This should be installed in its own environment since it has conflicting dependencies with Circos:
+The Circos MAG tool must be installed into the `circos_mag` Conda environment using:
 ```
-> conda create -n samtools -c bioconda samtools
-```
-
-This tool can be installed by downloading and uncompressing the software as follows:
-```
-> wget https://github.com/Koonkie-Cloud-Services/circos_mag/archive/refs/tags/1.0.0.tar.gz
-> tar -xvzf 1.0.0.tar.gz
+> git clone https://github.com/Koonkie-Cloud-Services/circos_mag.git
+> cd circos_mag
+> python -m pip install .
 ```
 
 You can test the installation using the data in the `example` directory:
 ```
-> cd circos_mag-1.0.0
-> ./bin/circos_mag plot --genome_file ./example/GCA_016214285.1_ASM1621428v1_genomic.fna.gz --gff_file ./example/GCA_016214285.1.gff --coverage_file ./example/coverage.tsv.gz --completeness 96.0 --output_dir ~/tmp/test_install
+> circos_mag plot --genome_file ./example/GCA_016214285.1_ASM1621428v1_genomic.fna.gz --gff_file ./example/GCA_016214285.1.gff --coverage_file ./example/coverage.tsv.gz --completeness 96.0 --output_dir ~/tmp/test_install
+```
+
+You can also (optionally) install Samtools using Conda. This should be installed in its own environment since it has conflicting dependencies with Circos:
+```
+> conda create -n samtools -c bioconda samtools
 ```
 
 ## Usage
 
 The typical workflow for generating a Circos plot of your MAG is as follows:
  1. Obtain genomic FASTA file for your MAG
- 2. Run Prokka on your MAG to identify the 5S/16S/23S rRNA and tRNA genes in your MAG (<i>note</i>: Prokka only accepts uncompressed files):
+ 2. Run Prokka on your MAG to identify the 5S, 16S, and 23S rRNA and tRNA genes in your MAG (<i>note</i>: Prokka only accepts uncompressed files):
  ```
 > conda activate circos_mag
 > prokka --outdir prokka --prefix example_name example_mag.fna

@@ -1,0 +1,71 @@
+[project]
+name = "circos_mag"
+description = "Generate Circos plot for a MAG."
+authors = [
+    {name="Donovan Parks"},
+    {name="Koonkie Inc."}
+]
+maintainers = [{name="Donovan Parks", email='donovan@koonkie.com'}]
+classifiers = [
+    'Development Status :: 4 - Beta',
+    'Environment :: Console',
+    "Natural Language :: English",
+    'Intended Audience :: Science/Research',
+    'Topic :: Scientific/Engineering :: Bio-Informatics',
+    "Operating System :: POSIX :: Linux",
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10'
+]
+
+requires-python = '>=3.7'
+readme = 'README.md'
+dynamic = ['version']
+
+[project.urls]
+homepage = "https://github.com/Koonkie-Cloud-Services/circos_mag"
+documentation = "https://github.com/Koonkie-Cloud-Services/circos_mag#readme"
+repository = "https://github.com/Koonkie-Cloud-Services/circos_mag"
+changelog = "https://github.com/Koonkie-Cloud-Services/circos_mag/blob/main/CHANGELOG.md"
+
+[build-system]
+requires = [
+    "setuptools>=61.0.0",
+    "wheel>=0.34.2"
+]
+build-backend = "setuptools.build_meta"
+
+[project.optional-dependencies]
+test = [
+    "flake8==5.0.4",
+    "pytest>=6.2.5"
+]
+
+[project.scripts] # Entry points
+circos_mag = "circos_mag.__main__:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.setuptools.package-data]
+"config_files" = ["*.conf"]
+
+[tool.setuptools.dynamic]
+version = {attr = "circos_mag.__version__"}
+
+[tool.semantic_release]
+version_variable = "circos_mag/__init__.py:__version__"
+upload_to_repository = true
+upload_to_release = true
+upload_to_pypi = false
+commit_version_number = true
+version_source = "tag"
+major_on_zero = false
+patch_without_tag = true
+branch = "main"
+build_command = "python -m pip install -q build && python -m build"
