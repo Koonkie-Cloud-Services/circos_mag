@@ -1,5 +1,9 @@
 # Circos color definitions: https://circos.ca/documentation/tutorials/configuration/colors/images
-# 
+#
+# Colors can be specified by name: "red", "vdred" (very dark red)
+# Colors can be specified as RBG value strings: "255,0,0"
+# Colors can be specified using the Circos palettes: "set1-9-qual-2" (2nd color of the 9 color set1-qual palette)
+#
 # show_background attributes must be one of:
 #  yes: show background
 #  no: do not show background
